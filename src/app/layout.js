@@ -10,12 +10,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body>
-        <CartProvider>
-          <FavoritesProvider>
+      <body className="bg-gray-50 text-gray-900">
+        <FavoritesProvider>
+          <CartProvider>
             {children}
-          </FavoritesProvider>
-        </CartProvider>
+          </CartProvider>
+        </FavoritesProvider>
       </body>
     </html>
   );
