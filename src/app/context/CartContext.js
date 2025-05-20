@@ -8,18 +8,35 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
   const addToCart = (card) => {
-    setCart((prevCart) => {
-      const existing = prevCart.find((item) => item.id === card.id);
-      if (existing) {
-        return prevCart.map((item) =>
-          item.id === card.id
-            ? { ...item, quantity: Math.min(item.quantity + 1, 9) }
-            : item
-        );
-      }
-      return [...prevCart, { ...card, quantity: 1 }];
-    });
-  };
+  setCart((prevCart) => {
+    const existing = prevCart.find((item) => item.id === card.id);
+    if (existing) {
+      return prevCart.map((item) =>
+        item.id === card.id
+          ? { ...item, quantity: Math.min(item.quantity + 1, 9) }
+          : item
+      );
+    }
+
+    const basePrice = card.tcgplayer?.prices?.holofoil?.market || 0;
+
+    // Descuento aleatorio en 50% de los casos
+    const hasDiscount = Math.random() < 0.5;
+    const discountRate = 0.1 + Math.random() * 0.3; 
+    const discountPrice = hasDiscount ? basePrice * (1 - discountRate) : null;
+
+    return [
+      ...prevCart,
+      {
+        ...card,
+        quantity: 1,
+        originalPrice: basePrice,
+        discountPrice: hasDiscount ? discountPrice : null,
+      },
+    ];
+  });
+};
+
 
   const incrementQuantity = (id) => {
     setCart((prevCart) =>
