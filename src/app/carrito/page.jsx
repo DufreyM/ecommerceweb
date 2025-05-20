@@ -25,7 +25,7 @@ export default function CarritoPage() {
   }, [itemSubtotals]);
 
   return (
-    <main className="p-6 relative">
+    <main className="p-6 min-h-screen bg-gradient-to-br from-yellow-100 via-orange-200 to-yellow-300">
       <button
         onClick={() => router.push("/")}
         className="absolute top-4 left-4 text-red-600 text-2xl font-bold hover:scale-110"

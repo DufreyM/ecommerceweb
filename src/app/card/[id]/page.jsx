@@ -81,7 +81,7 @@ export default function CardPage({ params }) {
   const typeClass = typeColorMap[card.types?.[0]] || "bg-gray-100 text-gray-700";
 
   return (
-    <main className="p-6">
+    <main className="p-6 min-h-screen bg-gradient-to-br from-yellow-100 via-orange-200 to-yellow-300">
       <CardHeader card={card} isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
       <CardDetail card={card} typeClass={typeClass} addToCart={addToCart} />
       {similarCards.length > 0 && <SimilarCards similarCards={similarCards} />}
