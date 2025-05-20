@@ -57,11 +57,23 @@ export default function HomePage() {
   });
 
   if (loading) {
-    return <div className="p-6 text-xl">Cargando cartas...</div>;
-  }
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-200 via-orange-300 to-yellow-500">
+      <img
+        src="/pikachucorriendo.gif"
+        alt="Cargando..."
+        className="w-64 h-64 object-contain"
+      />
+      <p className="text-2xl font-bold text-yellow-900 mt-4 animate-pulse">
+        Cargando cartas...
+      </p>
+    </div>
+  );
+}
+
 
   return (
-    <main className="p-6">
+    <main className="p-6 min-h-screen bg-gradient-to-br from-yellow-100 via-orange-200 to-yellow-300">
       {/* Encabezado superior con carrito y filtros */}
       <div className="flex justify-between items-center mb-6">
         <button
@@ -86,15 +98,16 @@ export default function HomePage() {
       </div>
 
       {/* Barra de búsqueda */}
-      <div className="mb-6">
-        <input
-          type="text"
-          placeholder="Buscar Pokémon..."
-          className="w-full p-2 border border-gray-300 rounded"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+<div className="mb-6">
+  <input
+    type="text"
+    placeholder="Buscar Pokémon..."
+    className="w-full p-2 border border-gray-300 rounded bg-white"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
+</div>
+
 
       {/* Cartas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -120,7 +133,7 @@ export default function HomePage() {
       <div className="mt-4 flex justify-between">
         <button
           onClick={(e) => {
-            e.stopPropagation(); // ❗Evita que el click redireccione
+            e.stopPropagation(); 
             handleAddToCart(card);
           }}
           className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
@@ -129,7 +142,7 @@ export default function HomePage() {
         </button>
         <button
           onClick={(e) => {
-            e.stopPropagation(); // ❗Evita que el click redireccione
+            e.stopPropagation(); 
             toggleFavorite(card);
           }}
           className={`px-3 py-1 rounded ${

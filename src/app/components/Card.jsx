@@ -1,16 +1,12 @@
-// components/Card.jsx
 
 import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
 import { FavoritesContext } from "@/context/FavoritesContext";
 import { Heart, HeartOff, ShoppingCart } from "lucide-react";
-
 export default function Card({ card }) {
   const { addToCart } = useContext(CartContext);
   const { favorites, toggleFavorite } = useContext(FavoritesContext);
-
   const isFavorited = favorites.some((fav) => fav.id === card.id);
-
   return (
     <div className="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center transition-transform hover:scale-105">
       <img
