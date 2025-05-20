@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { CartContext } from "./context/CartContext";
 import { FavoritesContext } from "./context/FavoritesContext";
 import { useRouter } from "next/navigation";
@@ -14,8 +14,15 @@ export default function HomePage() {
   const { toggleFavorite, favorites } = useContext(FavoritesContext);
   const router = useRouter();
 
+  const showFavoritesOnly = useRef(false); 
+
   const handleAddToCart = (card) => {
     addToCart(card); // ya no redirige
+  };
+
+  const toggleShowFavorites = () => {
+    showFavoritesOnly.current = !showFavoritesOnly.current;
+    setSearch((prev) => prev); 
   };
 
   useEffect(() => {
@@ -42,9 +49,12 @@ export default function HomePage() {
     fetchCards();
   }, []);
 
-  const filteredCards = cards.filter((card) =>
-    card.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // ✅ Filtro por nombre y favoritos si está activado
+  const filteredCards = cards.filter((card) => {
+    const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase());
+    const isFavorite = favorites.find((f) => f.id === card.id);
+    return matchesSearch && (!showFavoritesOnly.current || isFavorite);
+  });
 
   if (loading) {
     return <div className="p-6 text-xl">Cargando cartas...</div>;
@@ -52,7 +62,7 @@ export default function HomePage() {
 
   return (
     <main className="p-6">
-      {/* Encabezado con carrito y búsqueda */}
+      {/* Encabezado superior con carrito y filtros */}
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={() => router.push("/carrito")}
@@ -61,12 +71,21 @@ export default function HomePage() {
         >
           <ShoppingCart className="w-8 h-8" />
         </button>
+
         <h1 className="text-2xl sm:text-3xl font-bold text-center flex-1">
           ECCOMERCE MEJÍA PUCHAMON
         </h1>
-        <div className="w-8 h-8 opacity-0" /> {/* Espacio para equilibrar el ícono */}
+
+        <button
+          onClick={toggleShowFavorites}
+          className="text-sm bg-yellow-300 hover:bg-yellow-400 px-3 py-1 rounded"
+          title="Mostrar solo favoritos"
+        >
+          {showFavoritesOnly.current ? "Ver todos" : "Solo ❤️"}
+        </button>
       </div>
 
+      {/* Barra de búsqueda */}
       <div className="mb-6">
         <input
           type="text"
@@ -77,6 +96,7 @@ export default function HomePage() {
         />
       </div>
 
+      {/* Cartas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredCards.map((card) => (
           <div
@@ -91,8 +111,7 @@ export default function HomePage() {
             <div className="p-4">
               <h2 className="text-xl font-semibold">{card.name}</h2>
               <p className="text-sm text-green-600">
-                Precio: $
-                {card.tcgplayer?.prices?.holofoil?.market?.toFixed(2) ?? "N/A"}
+                Precio: ${card.tcgplayer?.prices?.holofoil?.market?.toFixed(2) ?? "N/A"}
               </p>
               <p className="text-sm text-gray-500">
                 {card.supertype} - {card.subtypes?.join(", ")}
