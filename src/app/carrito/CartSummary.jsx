@@ -23,6 +23,7 @@ export default function CartSummary({ subtotal }) {
       <div className="mt-6 text-center">
         <button
           onClick={() => router.push("/pago")}
+          disabled={subtotal > 999.99}
           className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded text-lg"
         >
           Comprar

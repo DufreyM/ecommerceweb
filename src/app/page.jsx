@@ -49,7 +49,6 @@ export default function HomePage() {
     fetchCards();
   }, []);
 
-  // ✅ Filtro por nombre y favoritos si está activado
   const filteredCards = cards.filter((card) => {
     const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase());
     const isFavorite = favorites.find((f) => f.id === card.id);
@@ -114,7 +113,7 @@ export default function HomePage() {
         {filteredCards.map((card) => (
   <div
     key={card.id}
-    onClick={() => router.push(`/card/${card.id}`)} // 👉 redirige al hacer clic
+    onClick={() => router.push(`/card/${card.id}`)} 
     className="bg-white rounded-xl shadow-md overflow-hidden hover:scale-105 transition transform cursor-pointer"
   >
     <img
