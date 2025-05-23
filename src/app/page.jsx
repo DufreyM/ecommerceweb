@@ -42,10 +42,13 @@ export default function HomePage() {
   }, []);
 
   const filteredCards = cards.filter((card) => {
-    const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase());
-    const isFavorite = favorites.find((f) => f.id === card.id);
-    return matchesSearch && (!showFavoritesOnly.current || isFavorite);
-  });
+  const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase());
+  const isFavorite = favorites.find((f) => f.id === card.id);
+  const hasValidPrice = card.tcgplayer?.prices?.holofoil?.market != null;
+
+  return matchesSearch && hasValidPrice && (!showFavoritesOnly.current || isFavorite);
+});
+
 
   if (loading) return <LoadingScreen />;
 

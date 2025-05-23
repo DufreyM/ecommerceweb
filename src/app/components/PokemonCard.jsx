@@ -1,4 +1,19 @@
-export default function PokemonCard({ card, onAddToCart, onToggleFavorite, isFavorite, onClick }) {
+import { useState } from "react";
+
+export default function PokemonCard({
+  card,
+  onAddToCart,
+  onToggleFavorite,
+  isFavorite,
+  onClick,
+}) {
+  const [likes, setLikes] = useState(0);
+
+  const handleLike = (e) => {
+    e.stopPropagation(); // Para evitar que se active el onClick que redirige
+    setLikes((prev) => prev + 1);
+  };
+
   return (
     <div
       onClick={onClick}
@@ -12,12 +27,13 @@ export default function PokemonCard({ card, onAddToCart, onToggleFavorite, isFav
       <div className="p-4">
         <h2 className="text-xl font-semibold">{card.name}</h2>
         <p className="text-sm text-green-600">
-          Precio: ${card.tcgplayer?.prices?.holofoil?.market?.toFixed(2) ?? "N/A"}
+          Precio: $
+          {card.tcgplayer?.prices?.holofoil?.market?.toFixed(2) ?? "N/A"}
         </p>
         <p className="text-sm text-gray-500">
           {card.supertype} - {card.subtypes?.join(", ")}
         </p>
-        <div className="mt-4 flex justify-between">
+        <div className="mt-4 flex justify-between items-center">
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -27,6 +43,7 @@ export default function PokemonCard({ card, onAddToCart, onToggleFavorite, isFav
           >
             Agregar al carrito
           </button>
+
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -37,6 +54,13 @@ export default function PokemonCard({ card, onAddToCart, onToggleFavorite, isFav
             }`}
           >
             ❤️
+          </button>
+
+          <button
+            onClick={handleLike}
+            className="flex items-center gap-1 px-3 py-1 rounded bg-pink-100 hover:bg-pink-200 text-pink-600"
+          >
+            💖 {likes}
           </button>
         </div>
       </div>
