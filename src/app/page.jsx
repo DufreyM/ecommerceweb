@@ -3,8 +3,10 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { CartContext } from "./context/CartContext";
 import { FavoritesContext } from "./context/FavoritesContext";
-import { useRouter } from "next/navigation";
-import { ShoppingCart } from "lucide-react";
+import HeaderBar from "./components/HeaderBar";
+import SearchBar from "./components/SearchBar";
+import CardGrid from "./components/CardGrid";
+import LoadingScreen from "./components/LoadingScreen";
 
 export default function HomePage() {
   const [cards, setCards] = useState([]);
@@ -12,31 +14,21 @@ export default function HomePage() {
   const [search, setSearch] = useState("");
   const { addToCart } = useContext(CartContext);
   const { toggleFavorite, favorites } = useContext(FavoritesContext);
-  const router = useRouter();
 
-  const showFavoritesOnly = useRef(false); 
-
-  const handleAddToCart = (card) => {
-    addToCart(card);
-  };
+  const showFavoritesOnly = useRef(false);
 
   const toggleShowFavorites = () => {
     showFavoritesOnly.current = !showFavoritesOnly.current;
-    setSearch((prev) => prev); 
+    setSearch((prev) => prev); // fuerza el re-render
   };
 
   useEffect(() => {
     const fetchCards = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          "https://api.pokemontcg.io/v2/cards?pageSize=250",
-          {
-            headers: {
-              "X-Api-Key": "89bf9437-6145-41f5-82b5-280d4d522ce3",
-            },
-          }
-        );
+        const res = await fetch("https://api.pokemontcg.io/v2/cards?pageSize=250", {
+          headers: { "X-Api-Key": "89bf9437-6145-41f5-82b5-280d4d522ce3" },
+        });
         const data = await res.json();
         setCards(data.data);
       } catch (error) {
@@ -55,109 +47,21 @@ export default function HomePage() {
     return matchesSearch && (!showFavoritesOnly.current || isFavorite);
   });
 
-  if (loading) {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-200 via-orange-300 to-yellow-500">
-      <img
-        src="/pikachucorriendo.gif"
-        alt="Cargando..."
-        className="w-64 h-64 object-contain"
-      />
-      <p className="text-2xl font-bold text-yellow-900 mt-4 animate-pulse">
-        Cargando cartas...
-      </p>
-    </div>
-  );
-}
-
+  if (loading) return <LoadingScreen />;
 
   return (
     <main className="p-6 min-h-screen bg-gradient-to-br from-yellow-100 via-orange-200 to-yellow-300">
-      {/* Encabezado superior con carrito y filtros */}
-      <div className="flex justify-between items-center mb-6">
-        <button
-          onClick={() => router.push("/carrito")}
-          className="text-blue-600 hover:text-blue-800"
-          title="Ir al carrito"
-        >
-          <ShoppingCart className="w-8 h-8" />
-        </button>
-
-        <h1 className="text-2xl sm:text-3xl font-bold text-center flex-1">
-          ECCOMERCE MEJÍA PUCHAMON
-        </h1>
-
-        <button
-          onClick={toggleShowFavorites}
-          className="text-sm bg-yellow-300 hover:bg-yellow-400 px-3 py-1 rounded"
-          title="Mostrar solo favoritos"
-        >
-          {showFavoritesOnly.current ? "Ver todos" : "Solo ❤️"}
-        </button>
-      </div>
-
-      {/* Barra de búsqueda */}
-<div className="mb-6">
-  <input
-    type="text"
-    placeholder="Buscar Pokémon..."
-    className="w-full p-2 border border-gray-300 rounded bg-white"
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-  />
-</div>
-
-
-      {/* Cartas */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredCards.map((card) => (
-  <div
-    key={card.id}
-    onClick={() => router.push(`/card/${card.id}`)} 
-    className="bg-white rounded-xl shadow-md overflow-hidden hover:scale-105 transition transform cursor-pointer"
-  >
-    <img
-      src={card.images.small}
-      alt={card.name}
-      className="w-full h-64 object-contain p-4"
-    />
-    <div className="p-4">
-      <h2 className="text-xl font-semibold">{card.name}</h2>
-      <p className="text-sm text-green-600">
-        Precio: ${card.tcgplayer?.prices?.holofoil?.market?.toFixed(2) ?? "N/A"}
-      </p>
-      <p className="text-sm text-gray-500">
-        {card.supertype} - {card.subtypes?.join(", ")}
-      </p>
-      <div className="mt-4 flex justify-between">
-        <button
-          onClick={(e) => {
-            e.stopPropagation(); 
-            handleAddToCart(card);
-          }}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
-        >
-          Agregar al carrito
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation(); 
-            toggleFavorite(card);
-          }}
-          className={`px-3 py-1 rounded ${
-            favorites.find((f) => f.id === card.id)
-              ? "bg-red-500 text-white"
-              : "bg-gray-200"
-          }`}
-        >
-          ❤️
-        </button>
-      </div>
-    </div>
-  </div>
-))}
-
-      </div>
+      <HeaderBar
+        onToggleFavorites={toggleShowFavorites}
+        showFavorites={showFavoritesOnly.current}
+      />
+      <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} />
+      <CardGrid
+        cards={filteredCards}
+        onAddToCart={addToCart}
+        onToggleFavorite={toggleFavorite}
+        favorites={favorites}
+      />
     </main>
   );
 }

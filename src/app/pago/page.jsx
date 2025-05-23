@@ -26,6 +26,26 @@ export default function PagoPage() {
 
   return (
     <main className="p-6 min-h-screen bg-gradient-to-br from-yellow-100 via-orange-200 to-yellow-300">
+      <button
+        onClick={() => router.push("/carrito")}
+        className="absolute top-4 left-4 text-red-600 text-2xl font-bold hover:scale-110"
+      >
+        ✖
+      </button>
+
+  
+  <div className="flex justify-end p-4">
+  <button
+    onClick={() => router.push("/")}
+    className="text-red-600 text-2xl font-bold hover:scale-110"
+    title="HOME"
+  >
+    🏠
+  </button>
+</div>
+
+
+
       <h1 className="text-3xl font-bold text-center mb-6">Confirmar Pago</h1>
 
       {/* Métodos de pago */}
