@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export default function PokemonCard({
   card,
@@ -10,9 +10,34 @@ export default function PokemonCard({
   const [likes, setLikes] = useState(0);
 
   const handleLike = (e) => {
-    e.stopPropagation(); // Para evitar que se active el onClick que redirige
+    e.stopPropagation();
     setLikes((prev) => prev + 1);
   };
+
+  const originalPrice = card.tcgplayer?.prices?.holofoil?.market ?? null;
+
+  const { hasDiscount, discountedPrice, discountRate } = useMemo(() => {
+    if (!originalPrice) return { hasDiscount: false, discountedPrice: null, discountRate: 0 };
+    const hasDiscount = Math.random() < 0.5;
+    const discountRate = 0.1 + Math.random() * 0.3;
+    const discountedPrice = hasDiscount ? originalPrice * (1 - discountRate) : null;
+    return { hasDiscount, discountedPrice, discountRate };
+  }, [originalPrice]);
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+
+    onAddToCart({
+      ...card,
+      originalPrice,
+      discountPrice: hasDiscount ? discountedPrice : null,
+      quantity: 1, 
+    });
+  };
+
+  // Generar una calificación aleatoria de 3 a 5
+const randomRating = useMemo(() => Math.floor(Math.random() * 3) + 3, []);
+
 
   return (
     <div
@@ -26,19 +51,42 @@ export default function PokemonCard({
       />
       <div className="p-4">
         <h2 className="text-xl font-semibold">{card.name}</h2>
-        <p className="text-sm text-green-600">
-          Precio: $
-          {card.tcgplayer?.prices?.holofoil?.market?.toFixed(2) ?? "N/A"}
-        </p>
+
+      <div className="flex items-center text-yellow-500 mb-2">
+    {Array.from({ length: 5 }).map((_, i) => (
+      <span key={i}>{i < randomRating ? "★" : "☆"}</span>
+    ))}
+    </div>
+
+
+        {originalPrice ? (
+          <div className="text-sm">
+            {hasDiscount ? (
+              <>
+                <p className="text-gray-500 line-through">
+                  Precio original: ${originalPrice.toFixed(2)}
+                </p>
+                <p className="text-green-600 font-semibold">
+                  Precio con descuento: ${discountedPrice.toFixed(2)}
+                </p>
+              </>
+            ) : (
+              <p className="text-green-600 font-semibold">
+                Precio: ${originalPrice.toFixed(2)}
+              </p>
+            )}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">Precio: N/A</p>
+        )}
+
         <p className="text-sm text-gray-500">
           {card.supertype} - {card.subtypes?.join(", ")}
         </p>
+
         <div className="mt-4 flex justify-between items-center">
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddToCart(card);
-            }}
+            onClick={handleAddToCart}
             className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
           >
             Agregar al carrito
