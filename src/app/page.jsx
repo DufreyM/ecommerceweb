@@ -1,72 +1,70 @@
-"use client";
+'use client'
 
-import { useEffect, useState, useContext, useRef } from "react";
-import { CartContext } from "./context/CartContext";
-import { FavoritesContext } from "./context/FavoritesContext";
-import HeaderBar from "./components/HeaderBar";
-import SearchBar from "./components/SearchBar";
-import CardGrid from "./components/CardGrid";
-import LoadingScreen from "./components/LoadingScreen";
+import { useEffect, useState, useContext, useRef } from 'react'
+import { CartContext } from './context/CartContext'
+import { FavoritesContext } from './context/FavoritesContext'
+import HeaderBar from './components/HeaderBar'
+import SearchBar from './components/SearchBar'
+import CardGrid from './components/CardGrid'
+import LoadingScreen from './components/LoadingScreen'
 
-export default function HomePage() {
-  const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const { addToCart } = useContext(CartContext);
-  const { toggleFavorite, favorites } = useContext(FavoritesContext);
+export default function HomePage () {
+  const [cards, setCards] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+  const { addToCart } = useContext(CartContext)
+  const { toggleFavorite, favorites } = useContext(FavoritesContext)
 
-  const showFavoritesOnly = useRef(false);
+  const showFavoritesOnly = useRef(false)
 
   const toggleShowFavorites = () => {
-    showFavoritesOnly.current = !showFavoritesOnly.current;
-    setSearch((prev) => prev); 
-  };
+    showFavoritesOnly.current = !showFavoritesOnly.current
+    setSearch((prev) => prev)
+  }
 
- useEffect(() => {
-  const fetchCards = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("https://api.pokemontcg.io/v2/cards?pageSize=250", {
-        headers: { "X-Api-Key": "89bf9437-6145-41f5-82b5-280d4d522ce3" },
-      });
-      const data = await res.json();
+  useEffect(() => {
+    const fetchCards = async () => {
+      setLoading(true)
+      try {
+        const res = await fetch('https://api.pokemontcg.io/v2/cards?pageSize=250', {
+          headers: { 'X-Api-Key': '89bf9437-6145-41f5-82b5-280d4d522ce3' }
+        })
+        const data = await res.json()
 
-      // 🔁 Enriquecer cada carta con precios consistentes
-      const enriched = data.data.map((card) => {
-        const originalPrice = card.tcgplayer?.prices?.holofoil?.market ?? 0;
-        const hasDiscount = Math.random() < 0.5;
-        const discountRate = 0.1 + Math.random() * 0.3;
-        const discountPrice = hasDiscount ? originalPrice * (1 - discountRate) : null;
+        // 🔁 Enriquecer cada carta con precios consistentes
+        const enriched = data.data.map((card) => {
+          const originalPrice = card.tcgplayer?.prices?.holofoil?.market ?? 0
+          const hasDiscount = Math.random() < 0.5
+          const discountRate = 0.1 + Math.random() * 0.3
+          const discountPrice = hasDiscount ? originalPrice * (1 - discountRate) : null
 
-        return {
-          ...card,
-          originalPrice,
-          discountPrice,
-        };
-      });
+          return {
+            ...card,
+            originalPrice,
+            discountPrice
+          }
+        })
 
-      setCards(enriched);
-    } catch (error) {
-      console.error("Error fetching Pokémon cards:", error);
-    } finally {
-      setLoading(false);
+        setCards(enriched)
+      } catch (error) {
+        console.error('Error fetching Pokémon cards:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  };
 
-  fetchCards();
-}, []);
-
+    fetchCards()
+  }, [])
 
   const filteredCards = cards.filter((card) => {
-  const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase());
-  const isFavorite = favorites.find((f) => f.id === card.id);
-  const hasValidPrice = card.tcgplayer?.prices?.holofoil?.market != null;
+    const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase())
+    const isFavorite = favorites.find((f) => f.id === card.id)
+    const hasValidPrice = card.tcgplayer?.prices?.holofoil?.market != null
 
-  return matchesSearch && hasValidPrice && (!showFavoritesOnly.current || isFavorite);
-});
+    return matchesSearch && hasValidPrice && (!showFavoritesOnly.current || isFavorite)
+  })
 
-
-  if (loading) return <LoadingScreen />;
+  if (loading) return <LoadingScreen />
 
   return (
     <main className="p-6 min-h-screen bg-gradient-to-br from-yellow-100 via-orange-200 to-yellow-300">
@@ -82,5 +80,5 @@ export default function HomePage() {
         favorites={favorites}
       />
     </main>
-  );
+  )
 }

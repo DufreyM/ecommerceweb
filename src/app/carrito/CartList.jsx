@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import CartItem from "./CartItem";
+import CartItem from './CartItem'
 
-export default function CartList({ items, incrementQuantity, decrementQuantity }) {
+export default function CartList ({ items, incrementQuantity, decrementQuantity }) {
   return (
     <div className="space-y-4">
       {items.map((item) => (
@@ -14,5 +14,5 @@ export default function CartList({ items, incrementQuantity, decrementQuantity }
         />
       ))}
     </div>
-  );
+  )
 }

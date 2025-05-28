@@ -1,28 +1,28 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo } from 'react'
 
-export default function PokemonCard({
+export default function PokemonCard ({
   card,
   onAddToCart,
   onToggleFavorite,
   isFavorite,
-  onClick,
+  onClick
 }) {
-  const [likes, setLikes] = useState(0);
+  const [likes, setLikes] = useState(0)
 
   const handleLike = (e) => {
-    e.stopPropagation();
-    setLikes((prev) => prev + 1);
-  };
+    e.stopPropagation()
+    setLikes((prev) => prev + 1)
+  }
 
   const handleAddToCart = (e) => {
-    e.stopPropagation();
+    e.stopPropagation()
     onAddToCart({
       ...card,
-      quantity: 1,
-    });
-  };
+      quantity: 1
+    })
+  }
 
-  const randomRating = useMemo(() => Math.floor(Math.random() * 3) + 3, []);
+  const randomRating = useMemo(() => Math.floor(Math.random() * 3) + 3, [])
 
   return (
     <div
@@ -39,33 +39,37 @@ export default function PokemonCard({
 
         <div className="flex items-center text-yellow-500 mb-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <span key={i}>{i < randomRating ? "★" : "☆"}</span>
+            <span key={i}>{i < randomRating ? '★' : '☆'}</span>
           ))}
         </div>
 
-        {card.originalPrice ? (
-          <div className="text-sm">
-            {card.discountPrice ? (
-              <>
-                <p className="text-gray-500 line-through">
+        {card.originalPrice
+          ? (
+            <div className="text-sm">
+              {card.discountPrice
+                ? (
+                  <>
+                    <p className="text-gray-500 line-through">
                   Precio original: ${card.originalPrice.toFixed(2)}
-                </p>
-                <p className="text-green-600 font-semibold">
+                    </p>
+                    <p className="text-green-600 font-semibold">
                   Precio con descuento: ${card.discountPrice.toFixed(2)}
-                </p>
-              </>
-            ) : (
-              <p className="text-green-600 font-semibold">
+                    </p>
+                  </>
+                )
+                : (
+                  <p className="text-green-600 font-semibold">
                 Precio: ${card.originalPrice.toFixed(2)}
-              </p>
-            )}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-500">Precio: N/A</p>
-        )}
+                  </p>
+                )}
+            </div>
+          )
+          : (
+            <p className="text-sm text-gray-500">Precio: N/A</p>
+          )}
 
         <p className="text-sm text-gray-500">
-          {card.supertype} - {card.subtypes?.join(", ")}
+          {card.supertype} - {card.subtypes?.join(', ')}
         </p>
 
         <div className="mt-4 flex justify-between items-center">
@@ -78,11 +82,11 @@ export default function PokemonCard({
 
           <button
             onClick={(e) => {
-              e.stopPropagation();
-              onToggleFavorite(card);
+              e.stopPropagation()
+              onToggleFavorite(card)
             }}
             className={`px-3 py-1 rounded ${
-              isFavorite ? "bg-red-500 text-white" : "bg-gray-200"
+              isFavorite ? 'bg-red-500 text-white' : 'bg-gray-200'
             }`}
           >
             ❤️
@@ -97,5 +101,5 @@ export default function PokemonCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

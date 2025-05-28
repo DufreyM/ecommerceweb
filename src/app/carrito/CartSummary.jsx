@@ -1,10 +1,10 @@
-"use client";
-import { useRouter } from "next/navigation";
+'use client'
+import { useRouter } from 'next/navigation'
 
-export default function CartSummary({ subtotal }) {
-  const router = useRouter();
+export default function CartSummary ({ subtotal }) {
+  const router = useRouter()
 
-  const total = subtotal.toFixed(2);
+  const total = subtotal.toFixed(2)
 
   return (
     <>
@@ -22,7 +22,7 @@ export default function CartSummary({ subtotal }) {
 
       <div className="mt-6 text-center">
         <button
-          onClick={() => router.push("/pago")}
+          onClick={() => router.push('/pago')}
           disabled={subtotal > 999.99}
           className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded text-lg"
         >
@@ -30,5 +30,5 @@ export default function CartSummary({ subtotal }) {
         </button>
       </div>
     </>
-  );
+  )
 }

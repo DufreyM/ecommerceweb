@@ -1,4 +1,4 @@
-export default function LoadingScreen() {
+export default function LoadingScreen () {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-200 via-orange-300 to-yellow-500">
       <img
@@ -10,5 +10,5 @@ export default function LoadingScreen() {
         Cargando cartas...
       </p>
     </div>
-  );
+  )
 }

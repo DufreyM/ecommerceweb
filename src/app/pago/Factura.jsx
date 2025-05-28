@@ -1,4 +1,4 @@
-export default function Factura({ cart }) {
+export default function Factura ({ cart }) {
   return (
     <section className="mb-6">
       <h2 className="text-xl font-semibold mb-2">Factura</h2>
@@ -18,5 +18,5 @@ export default function Factura({ cart }) {
         ))}
       </ul>
     </section>
-  );
+  )
 }

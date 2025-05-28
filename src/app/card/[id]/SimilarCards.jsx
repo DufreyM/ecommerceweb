@@ -1,8 +1,8 @@
-"use client";
-import { useRouter } from "next/navigation";
+'use client'
+import { useRouter } from 'next/navigation'
 
-export default function SimilarCards({ similarCards }) {
-  const router = useRouter();
+export default function SimilarCards ({ similarCards }) {
+  const router = useRouter()
 
   return (
     <div className="mt-10">
@@ -24,5 +24,5 @@ export default function SimilarCards({ similarCards }) {
         ))}
       </div>
     </div>
-  );
+  )
 }

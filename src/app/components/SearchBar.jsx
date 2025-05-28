@@ -1,4 +1,4 @@
-export default function SearchBar({ value, onChange }) {
+export default function SearchBar ({ value, onChange }) {
   return (
     <div className="mb-6">
       <input
@@ -9,5 +9,5 @@ export default function SearchBar({ value, onChange }) {
         onChange={onChange}
       />
     </div>
-  );
+  )
 }

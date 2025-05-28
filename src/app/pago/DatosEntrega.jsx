@@ -1,4 +1,4 @@
-export default function DatosEntrega({
+export default function DatosEntrega ({
   nombre,
   setNombre,
   direccion,
@@ -6,7 +6,7 @@ export default function DatosEntrega({
   ciudad,
   setCiudad,
   codigoPostal,
-  setCodigoPostal,
+  setCodigoPostal
 }) {
   return (
     <section className="mb-6">
@@ -42,5 +42,5 @@ export default function DatosEntrega({
         />
       </form>
     </section>
-  );
+  )
 }

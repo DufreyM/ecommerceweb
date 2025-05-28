@@ -1,13 +1,13 @@
-import { ShoppingCart } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ShoppingCart } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
-export default function HeaderBar({ onToggleFavorites, showFavorites }) {
-  const router = useRouter();
+export default function HeaderBar ({ onToggleFavorites, showFavorites }) {
+  const router = useRouter()
 
   return (
     <div className="flex justify-between items-center mb-6">
       <button
-        onClick={() => router.push("/carrito")}
+        onClick={() => router.push('/carrito')}
         className="text-blue-600 hover:text-blue-800"
         title="Ir al carrito"
       >
@@ -23,8 +23,8 @@ export default function HeaderBar({ onToggleFavorites, showFavorites }) {
         className="text-sm bg-yellow-300 hover:bg-yellow-400 px-3 py-1 rounded"
         title="Mostrar solo favoritos"
       >
-        {showFavorites ? "Ver todos" : "Solo ❤️"}
+        {showFavorites ? 'Ver todos' : 'Solo ❤️'}
       </button>
     </div>
-  );
+  )
 }

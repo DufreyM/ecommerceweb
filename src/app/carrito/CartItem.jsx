@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import React from "react";
+import React from 'react'
 
-export default function CartItem({ item, incrementQuantity, decrementQuantity }) {
+export default function CartItem ({ item, incrementQuantity, decrementQuantity }) {
   return (
     <div className="flex items-center gap-4 bg-white p-4 rounded shadow relative">
       <img
@@ -13,16 +13,18 @@ export default function CartItem({ item, incrementQuantity, decrementQuantity })
       <div className="flex-1">
         <h2 className="text-xl font-semibold">{item.name}</h2>
 
-        {item.discountPrice ? (
-          <p className="text-sm text-green-600">
-            Precio: <span className="line-through text-gray-400">${item.originalPrice.toFixed(2)}</span>{" "}
-            <span className="text-green-700 font-bold">${item.discountPrice.toFixed(2)}</span>
-          </p>
-        ) : (
-          <p className="text-sm text-gray-600">
+        {item.discountPrice
+          ? (
+            <p className="text-sm text-green-600">
+            Precio: <span className="line-through text-gray-400">${item.originalPrice.toFixed(2)}</span>{' '}
+              <span className="text-green-700 font-bold">${item.discountPrice.toFixed(2)}</span>
+            </p>
+          )
+          : (
+            <p className="text-sm text-gray-600">
             Precio: ${item.originalPrice.toFixed(2)}
-          </p>
-        )}
+            </p>
+          )}
 
         <div className="flex items-center gap-2 mt-2">
           <button
@@ -34,7 +36,7 @@ export default function CartItem({ item, incrementQuantity, decrementQuantity })
           <span>{item.quantity}</span>
           <button
             onClick={() => {
-              if (item.quantity < 9) incrementQuantity(item.id);
+              if (item.quantity < 9) incrementQuantity(item.id)
             }}
             className="bg-gray-300 px-2 py-1 rounded"
           >
@@ -47,5 +49,5 @@ export default function CartItem({ item, incrementQuantity, decrementQuantity })
         </p>
       </div>
     </div>
-  );
+  )
 }

@@ -1,8 +1,8 @@
-import PokemonCard from "./PokemonCard";
-import { useRouter } from "next/navigation";
+import PokemonCard from './PokemonCard'
+import { useRouter } from 'next/navigation'
 
-export default function CardGrid({ cards, onAddToCart, onToggleFavorite, favorites }) {
-  const router = useRouter();
+export default function CardGrid ({ cards, onAddToCart, onToggleFavorite, favorites }) {
+  const router = useRouter()
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -17,5 +17,5 @@ export default function CardGrid({ cards, onAddToCart, onToggleFavorite, favorit
         />
       ))}
     </div>
-  );
+  )
 }
