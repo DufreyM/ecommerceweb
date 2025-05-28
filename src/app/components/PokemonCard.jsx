@@ -14,30 +14,15 @@ export default function PokemonCard({
     setLikes((prev) => prev + 1);
   };
 
-  const originalPrice = card.tcgplayer?.prices?.holofoil?.market ?? null;
-
-  const { hasDiscount, discountedPrice, discountRate } = useMemo(() => {
-    if (!originalPrice) return { hasDiscount: false, discountedPrice: null, discountRate: 0 };
-    const hasDiscount = Math.random() < 0.5;
-    const discountRate = 0.1 + Math.random() * 0.3;
-    const discountedPrice = hasDiscount ? originalPrice * (1 - discountRate) : null;
-    return { hasDiscount, discountedPrice, discountRate };
-  }, [originalPrice]);
-
   const handleAddToCart = (e) => {
     e.stopPropagation();
-
     onAddToCart({
       ...card,
-      originalPrice,
-      discountPrice: hasDiscount ? discountedPrice : null,
-      quantity: 1, 
+      quantity: 1,
     });
   };
 
-  // Generar una calificación aleatoria de 3 a 5
-const randomRating = useMemo(() => Math.floor(Math.random() * 3) + 3, []);
-
+  const randomRating = useMemo(() => Math.floor(Math.random() * 3) + 3, []);
 
   return (
     <div
@@ -52,27 +37,26 @@ const randomRating = useMemo(() => Math.floor(Math.random() * 3) + 3, []);
       <div className="p-4">
         <h2 className="text-xl font-semibold">{card.name}</h2>
 
-      <div className="flex items-center text-yellow-500 mb-2">
-    {Array.from({ length: 5 }).map((_, i) => (
-      <span key={i}>{i < randomRating ? "★" : "☆"}</span>
-    ))}
-    </div>
+        <div className="flex items-center text-yellow-500 mb-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <span key={i}>{i < randomRating ? "★" : "☆"}</span>
+          ))}
+        </div>
 
-
-        {originalPrice ? (
+        {card.originalPrice ? (
           <div className="text-sm">
-            {hasDiscount ? (
+            {card.discountPrice ? (
               <>
                 <p className="text-gray-500 line-through">
-                  Precio original: ${originalPrice.toFixed(2)}
+                  Precio original: ${card.originalPrice.toFixed(2)}
                 </p>
                 <p className="text-green-600 font-semibold">
-                  Precio con descuento: ${discountedPrice.toFixed(2)}
+                  Precio con descuento: ${card.discountPrice.toFixed(2)}
                 </p>
               </>
             ) : (
               <p className="text-green-600 font-semibold">
-                Precio: ${originalPrice.toFixed(2)}
+                Precio: ${card.originalPrice.toFixed(2)}
               </p>
             )}
           </div>

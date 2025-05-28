@@ -16,7 +16,17 @@ export default function CardDetail({ card, typeClass, addToCart }) {
         <p><strong>Tipo:</strong> {card.types?.join(", ")}</p>
         <p><strong>Evoluciona a:</strong> {card.evolvesTo?.join(", ") || "—"}</p>
         <p><strong>Rareza:</strong> {card.rarity}</p>
-        <p><strong>Precio:</strong> ${card.tcgplayer?.prices?.holofoil?.market?.toFixed(2) ?? "N/A"}</p>
+
+        {/* Precio */}
+        <p><strong>Precio:</strong> {
+          card.discountPrice
+            ? <>
+                <span className="line-through text-gray-400">${card.originalPrice.toFixed(2)}</span>{" "}
+                <span className="text-green-700 font-bold">${card.discountPrice.toFixed(2)}</span>
+              </>
+            : `$${card.originalPrice.toFixed(2)}`
+        }</p>
+
         <p><strong>Debilidades:</strong> {card.weaknesses?.map(w => `${w.type} ${w.value}`).join(", ") || "—"}</p>
         <p><strong>Coste de retirada:</strong> {card.retreatCost?.join(", ") || "—"}</p>
         <p><strong>Artista:</strong> {card.artist}</p>
@@ -49,8 +59,14 @@ export default function CardDetail({ card, typeClass, addToCart }) {
           </div>
         )}
 
+        {/* Botón corregido */}
         <button
-          onClick={() => addToCart(card)}
+          onClick={() => {
+            addToCart({
+              ...card,
+              quantity: 1,
+            });
+          }}
           className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded mt-4"
         >
           Añadir al carrito

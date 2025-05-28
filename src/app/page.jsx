@@ -19,27 +19,43 @@ export default function HomePage() {
 
   const toggleShowFavorites = () => {
     showFavoritesOnly.current = !showFavoritesOnly.current;
-    setSearch((prev) => prev); // fuerza el re-render
+    setSearch((prev) => prev); 
   };
 
-  useEffect(() => {
-    const fetchCards = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch("https://api.pokemontcg.io/v2/cards?pageSize=250", {
-          headers: { "X-Api-Key": "89bf9437-6145-41f5-82b5-280d4d522ce3" },
-        });
-        const data = await res.json();
-        setCards(data.data);
-      } catch (error) {
-        console.error("Error fetching Pokémon cards:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+ useEffect(() => {
+  const fetchCards = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("https://api.pokemontcg.io/v2/cards?pageSize=250", {
+        headers: { "X-Api-Key": "89bf9437-6145-41f5-82b5-280d4d522ce3" },
+      });
+      const data = await res.json();
 
-    fetchCards();
-  }, []);
+      // 🔁 Enriquecer cada carta con precios consistentes
+      const enriched = data.data.map((card) => {
+        const originalPrice = card.tcgplayer?.prices?.holofoil?.market ?? 0;
+        const hasDiscount = Math.random() < 0.5;
+        const discountRate = 0.1 + Math.random() * 0.3;
+        const discountPrice = hasDiscount ? originalPrice * (1 - discountRate) : null;
+
+        return {
+          ...card,
+          originalPrice,
+          discountPrice,
+        };
+      });
+
+      setCards(enriched);
+    } catch (error) {
+      console.error("Error fetching Pokémon cards:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchCards();
+}, []);
+
 
   const filteredCards = cards.filter((card) => {
   const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase());

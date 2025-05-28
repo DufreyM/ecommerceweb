@@ -18,12 +18,11 @@ const addToCart = (card) => {
       );
     }
 
-    // Aquí ya NO se recalcula precio ni descuento
     return [
       ...prevCart,
       {
         ...card,
-        quantity: card.quantity ?? 1, // en caso de que no lo mandes desde la card
+        quantity: card.quantity ?? 1, 
         originalPrice: card.originalPrice ?? 0,
         discountPrice: card.discountPrice ?? null,
       },
