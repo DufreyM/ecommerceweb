@@ -22,7 +22,20 @@ export default function CardPage({ params }) {
       try {
         const res = await fetch(`https://api.pokemontcg.io/v2/cards/${id}`);
         const data = await res.json();
-        setCard(data.data);
+
+        // Enriquecer con precios
+        const originalPrice = data.data.tcgplayer?.prices?.holofoil?.market ?? 0;
+        const hasDiscount = Math.random() < 0.5;
+        const discountRate = 0.1 + Math.random() * 0.3;
+        const discountPrice = hasDiscount ? originalPrice * (1 - discountRate) : null;
+
+        const enrichedCard = {
+          ...data.data,
+          originalPrice,
+          discountPrice,
+        };
+
+        setCard(enrichedCard);
 
         const resAll = await fetch(
           `https://api.pokemontcg.io/v2/cards?pageSize=50&name=${data.data.name}`
@@ -52,19 +65,20 @@ export default function CardPage({ params }) {
   }, [id]);
 
   if (!card) {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-200 via-orange-300 to-yellow-500">
-      <img
-        src="/pikachucorriendo.gif"
-        alt="Cargando..."
-        className="w-64 h-64 object-contain"
-      />
-      <p className="text-2xl font-bold text-yellow-900 mt-4 animate-pulse">
-        Cargando
-      </p>
-    </div>
-  );
-}
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-200 via-orange-300 to-yellow-500">
+        <img
+          src="/pikachucorriendo.gif"
+          alt="Cargando..."
+          className="w-64 h-64 object-contain"
+        />
+        <p className="text-2xl font-bold text-yellow-900 mt-4 animate-pulse">
+          Cargando
+        </p>
+      </div>
+    );
+  }
+
   const typeColorMap = {
     Grass: "bg-green-100 text-green-700",
     Fire: "bg-red-100 text-red-700",

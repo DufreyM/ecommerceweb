@@ -59,7 +59,7 @@ export default function CardDetail({ card, typeClass, addToCart }) {
           </div>
         )}
 
-        {/* Botón corregido */}
+        {/* Botón*/}
         <button
           onClick={() => {
             addToCart({
